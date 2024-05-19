@@ -1,59 +1,24 @@
-import 'dart:async';
-
 import 'package:bounchan_hotel_member_app/constants/colors.dart';
 import 'package:bounchan_hotel_member_app/constants/fonts.dart';
 import 'package:bounchan_hotel_member_app/constants/styles.dart';
-import 'package:bounchan_hotel_member_app/pages/auth/registerPage.dart';
+import 'package:bounchan_hotel_member_app/pages/auth/forgotPasswordOtpPage.dart';
 import 'package:bounchan_hotel_member_app/services/otpService.dart';
 import 'package:bounchan_hotel_member_app/widgets/errorDialogWidget.dart';
 import 'package:bounchan_hotel_member_app/widgets/loadingDialogWidget.dart';
 import 'package:flutter/material.dart';
 
-class RegisterOtpPage extends StatefulWidget {
-  const RegisterOtpPage({super.key, required this.email});
-  final String email;
-
-  @override
-  State<RegisterOtpPage> createState() => _RegisterOtpPageState();
-}
-
-class _RegisterOtpPageState extends State<RegisterOtpPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _loadingKey = GlobalKey<State>();
-  final _otpController = TextEditingController();
-  late Timer _timer;
-  int _start = 120;
-  void startTimer() {
-    _start = 120;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_start > 0) {
-          _start--;
-        } else {
-          _timer.cancel();
-        }
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+class ForgotPasswordEmailPage extends StatelessWidget {
+  const ForgotPasswordEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    final _loadingKey = GlobalKey<State>();
+    final _emailController = TextEditingController();
     return Scaffold(
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
-        title: Text("ຢືນຢັນລະຫັດ OTP"),
+        title: Text("ອີເມລ"),
       ),
       body: Form(
         key: _formKey,
@@ -68,47 +33,15 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Center(
-                          child: Text(
-                            "ກະລຸນາປ້ອນລະຫັດ OTP ທີ່ສົ່ງໄປຫາອີເມລ",
-                            style: getRegularStyle(
-                                color: ColorConstants.white,
-                                fontSize: FontSizes.s16),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            "${widget.email}",
-                            style: getRegularStyle(
-                                color: ColorConstants.white,
-                                fontSize: FontSizes.s16),
-                          ),
-                        ),
-                        SizedBox(height: 50),
                         Padding(
                           padding: EdgeInsets.only(left: 2, bottom: 2),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "ລະຫັດ OTP",
-                                  style: getRegularStyle(
-                                      color: ColorConstants.white),
-                                ),
-                                Text(
-                                  "ໝົດເວລາພາຍໃນ $_start ວິນາທີ",
-                                  style: getRegularStyle(
-                                      color: ColorConstants.danger),
-                                ),
-                              ],
-                            ),
+                          child: Text(
+                            "ອີເມລ",
+                            style: getRegularStyle(color: ColorConstants.white),
                           ),
                         ),
                         TextFormField(
-                          controller: _otpController,
-                          autofocus: true,
+                          controller: _emailController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -125,10 +58,9 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                               borderSide: BorderSide(
                                   width: 0.5, color: ColorConstants.white),
                             ),
-                            hintText: "xxxxxx",
+                            hintText: "example@gmail.com",
                             hintStyle: getRegularStyle(
-                                color: ColorConstants.lightGrey,
-                                fontSize: FontSizes.s16),
+                                color: ColorConstants.lightGrey),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
                               borderSide: BorderSide(
@@ -139,21 +71,15 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 10),
                           ),
-                          textAlign: TextAlign.center,
-                          maxLength: 6,
-                          keyboardType: TextInputType.number,
-                          style: getRegularStyle(
-                              color: ColorConstants.white,
-                              fontSize: FontSizes.s16),
+                          style: getRegularStyle(color: ColorConstants.white),
                           validator: (value) {
-                            if (_otpController.text.isEmpty ||
-                                _otpController.text == "") {
-                              return "ກະລຸນາປ້ອນລະຫັດ OTP";
-                            } else if (_otpController.text.length < 6) {
-                              return "ກະລຸນາປ້ອນລະຫັດ OTP ໃຫ້ຄົບ 6 ໂຕ";
+                            if (_emailController.text.isEmpty ||
+                                _emailController.text == "") {
+                              return "ກະລຸນາປ້ອນອີເມລ";
                             }
                             return null;
                           },
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ],
                     ),
@@ -166,8 +92,8 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     LoadingDialogWidget.showLoading(context, _loadingKey);
-                    String result = await confirmOtpService(
-                        email: widget.email, otp: _otpController.text);
+                    String result =
+                        await sendOtpService(email: _emailController.text);
                     Navigator.of(_loadingKey.currentContext!,
                             rootNavigator: true)
                         .pop();
@@ -175,8 +101,8 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegisterPage(email: widget.email)))
+                                  builder: (context) => ForgotPasswordOtpPage(
+                                      email: _emailController.text)))
                           .then((value) => Navigator.pop(context));
                     } else {
                       showDialog(

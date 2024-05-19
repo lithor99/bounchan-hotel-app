@@ -3,21 +3,21 @@ import 'dart:async';
 import 'package:bounchan_hotel_member_app/constants/colors.dart';
 import 'package:bounchan_hotel_member_app/constants/fonts.dart';
 import 'package:bounchan_hotel_member_app/constants/styles.dart';
-import 'package:bounchan_hotel_member_app/pages/auth/registerPage.dart';
+import 'package:bounchan_hotel_member_app/pages/auth/resetPasswordPage.dart';
 import 'package:bounchan_hotel_member_app/services/otpService.dart';
 import 'package:bounchan_hotel_member_app/widgets/errorDialogWidget.dart';
 import 'package:bounchan_hotel_member_app/widgets/loadingDialogWidget.dart';
 import 'package:flutter/material.dart';
 
-class RegisterOtpPage extends StatefulWidget {
-  const RegisterOtpPage({super.key, required this.email});
+class ForgotPasswordOtpPage extends StatefulWidget {
+  const ForgotPasswordOtpPage({super.key, required this.email});
   final String email;
 
   @override
-  State<RegisterOtpPage> createState() => _RegisterOtpPageState();
+  State<ForgotPasswordOtpPage> createState() => _ForgotPasswordOtpPageState();
 }
 
-class _RegisterOtpPageState extends State<RegisterOtpPage> {
+class _ForgotPasswordOtpPageState extends State<ForgotPasswordOtpPage> {
   final _formKey = GlobalKey<FormState>();
   final _loadingKey = GlobalKey<State>();
   final _otpController = TextEditingController();
@@ -176,7 +176,7 @@ class _RegisterOtpPageState extends State<RegisterOtpPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      RegisterPage(email: widget.email)))
+                                      ResetPasswordPage(email: widget.email)))
                           .then((value) => Navigator.pop(context));
                     } else {
                       showDialog(

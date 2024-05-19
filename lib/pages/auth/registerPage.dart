@@ -1,10 +1,20 @@
+import 'dart:io';
 import 'package:bounchan_hotel_member_app/constants/colors.dart';
+import 'package:bounchan_hotel_member_app/constants/fonts.dart';
 import 'package:bounchan_hotel_member_app/constants/styles.dart';
-import 'package:bounchan_hotel_member_app/pages/home/homePage.dart';
+import 'package:bounchan_hotel_member_app/models/uploadModel.dart';
+import 'package:bounchan_hotel_member_app/pages/auth/loginPage.dart';
+import 'package:bounchan_hotel_member_app/services/memberService.dart';
+import 'package:bounchan_hotel_member_app/widgets/errorDialogWidget.dart';
+import 'package:bounchan_hotel_member_app/widgets/loadingDialogWidget.dart';
+import 'package:bounchan_hotel_member_app/widgets/succesDialogWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({super.key, required this.email});
+  final String email;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -12,14 +22,56 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: "lithor");
-  final _lastNameController = TextEditingController(text: "xiaye");
-  final _phoneNumberController = TextEditingController(text: "2078966646");
-  final _emailController = TextEditingController(text: "example@gmail.com");
-  final _passwordController = TextEditingController(text: "123456");
-  final _confirmPasswordController = TextEditingController(text: "123456");
+  final _loadingKey = GlobalKey<State>();
+  final _nameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _showPassword = false;
   String _gender = "";
+  String? _image;
+  CroppedFile? _croppedFile;
+
+  Future<void> _onTakeImage() async {
+    XFile? fileImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+        imageQuality: 20);
+    if (fileImage != null) {
+      _croppedFile = await ImageCropper().cropImage(
+        cropStyle: CropStyle.rectangle,
+        sourcePath: fileImage.path,
+        compressQuality: 20,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: '',
+              toolbarColor: ColorConstants.primary,
+              toolbarWidgetColor: ColorConstants.white,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: false),
+          IOSUiSettings(
+              title: '',
+              aspectRatioPickerButtonHidden: true,
+              resetButtonHidden: true),
+        ],
+      );
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _emailController.text = widget.email;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,14 +98,25 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: CircleAvatar(
                             radius: 80,
                             backgroundColor: ColorConstants.primary,
-                            backgroundImage: NetworkImage(
-                                "https://cdn-icons-png.flaticon.com/512/3870/3870822.png"),
+                            backgroundImage:
+                                _croppedFile != null && _croppedFile != ""
+                                    ? FileImage(File(_croppedFile!.path))
+                                    : null,
+                            child: _croppedFile == null || _croppedFile == ""
+                                ? Icon(
+                                    Icons.person,
+                                    color: ColorConstants.black,
+                                    size: 50,
+                                  )
+                                : null,
                           ),
                         ),
                       ),
                       Center(
                         child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _onTakeImage();
+                            },
                             icon: Icon(
                               Icons.add_a_photo_rounded,
                               size: 30,
@@ -226,7 +289,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         ),
-                        readOnly: true,
+                        maxLength: 10,
                         style: getRegularStyle(color: ColorConstants.white),
                         validator: (value) {
                           if (_phoneNumberController.text.isEmpty ||
@@ -236,7 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 15),
+                      // SizedBox(height: 15),
                       Padding(
                         padding: EdgeInsets.only(left: 2, bottom: 2),
                         child: Text(
@@ -276,6 +339,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         ),
                         style: getRegularStyle(color: ColorConstants.white),
+                        readOnly: true,
                       ),
                       SizedBox(height: 15),
                       Padding(
@@ -395,6 +459,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           if (_confirmPasswordController.text.isEmpty ||
                               _confirmPasswordController.text == "") {
                             return "ກະລຸນາປ້ອນລະຫັດຢືນຢັນ";
+                          } else if (_passwordController.text !=
+                              _confirmPasswordController.text) {
+                            return "ລະຫັດຜ່ານບໍ່ຄືກັນ";
                           }
                           return null;
                         },
@@ -407,10 +474,89 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SafeArea(
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    LoadingDialogWidget.showLoading(context, _loadingKey);
+                    if (_croppedFile != null) {
+                      UploadModel? uploadModel = await uploadFileService(
+                          file: File(_croppedFile!.path));
+                      if (uploadModel!.url != null) {
+                        _image = uploadModel.url;
+                      }
+                      String result = await registerService(
+                        name: _nameController.text,
+                        lastName: _lastNameController.text,
+                        phoneNumber: _phoneNumberController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        gender: _gender,
+                        image: _image!,
+                      );
+                      Navigator.of(_loadingKey.currentContext!,
+                              rootNavigator: true)
+                          .pop();
+                      if (result == "success") {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SuccessDialogWidget(
+                              detail: "ລົງທະບຽນສຳເລັດ",
+                            );
+                          },
+                        );
+
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (route) => false);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ErrorDialogWidget(
+                              detail: "ເກີດຂໍ້ຜິດພາດ",
+                            );
+                          },
+                        );
+                      }
+                    } else {
+                      String result = await registerService(
+                        name: _nameController.text,
+                        lastName: _lastNameController.text,
+                        phoneNumber: _phoneNumberController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        gender: _gender,
+                      );
+                      Navigator.of(_loadingKey.currentContext!,
+                              rootNavigator: true)
+                          .pop();
+                      if (result == "success") {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SuccessDialogWidget(
+                              detail: "ລົງທະບຽນສຳເລັດ",
+                            );
+                          },
+                        );
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (route) => false);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ErrorDialogWidget(
+                              detail: "ເກີດຂໍ້ຜິດພາດ",
+                            );
+                          },
+                        );
+                      }
+                    }
                   }
                 },
                 borderRadius: BorderRadius.only(
@@ -435,7 +581,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(width: 10),
                         Text(
                           "ບັນທຶກ",
-                          style: getBoldStyle(color: ColorConstants.black),
+                          style: getRegularStyle(
+                              color: ColorConstants.black,
+                              fontSize: FontSizes.s16),
                         ),
                       ],
                     ),

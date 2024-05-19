@@ -1,19 +1,25 @@
 import 'package:bounchan_hotel_member_app/constants/colors.dart';
+import 'package:bounchan_hotel_member_app/constants/fonts.dart';
 import 'package:bounchan_hotel_member_app/constants/styles.dart';
 import 'package:bounchan_hotel_member_app/pages/auth/registerOtpPage.dart';
+import 'package:bounchan_hotel_member_app/services/otpService.dart';
+import 'package:bounchan_hotel_member_app/widgets/errorDialogWidget.dart';
+import 'package:bounchan_hotel_member_app/widgets/loadingDialogWidget.dart';
 import 'package:flutter/material.dart';
 
-class RegisterPhoneNumberPage extends StatelessWidget {
-  const RegisterPhoneNumberPage({super.key});
+class RegisterEmailPage extends StatelessWidget {
+  RegisterEmailPage({super.key});
+
+  final _formKey = GlobalKey<FormState>();
+  final _loadingKey = GlobalKey<State>();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _phoneNumberController = TextEditingController(text: "2078966646");
     return Scaffold(
       backgroundColor: ColorConstants.black,
       appBar: AppBar(
-        title: Text("ເບີໂທລະສັບ"),
+        title: Text("ອີເມລ"),
       ),
       body: Form(
         key: _formKey,
@@ -31,12 +37,12 @@ class RegisterPhoneNumberPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(left: 2, bottom: 2),
                           child: Text(
-                            "ເບີໂທລະສັບ",
+                            "ອີເມລ",
                             style: getRegularStyle(color: ColorConstants.white),
                           ),
                         ),
                         TextFormField(
-                          controller: _phoneNumberController,
+                          controller: _emailController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -53,7 +59,7 @@ class RegisterPhoneNumberPage extends StatelessWidget {
                               borderSide: BorderSide(
                                   width: 0.5, color: ColorConstants.white),
                             ),
-                            hintText: "20xxxxxxxx",
+                            hintText: "example@gmail.com",
                             hintStyle: getRegularStyle(
                                 color: ColorConstants.lightGrey),
                             errorBorder: OutlineInputBorder(
@@ -66,15 +72,15 @@ class RegisterPhoneNumberPage extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 10),
                           ),
-                          maxLength: 10,
                           style: getRegularStyle(color: ColorConstants.white),
                           validator: (value) {
-                            if (_phoneNumberController.text.isEmpty ||
-                                _phoneNumberController.text == "") {
-                              return "ກະລຸນາປ້ອນເບີໂທລະສັບ";
+                            if (_emailController.text.isEmpty ||
+                                _emailController.text == "") {
+                              return "ກະລຸນາປ້ອນອີເມລ";
                             }
                             return null;
                           },
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ],
                     ),
@@ -84,13 +90,31 @@ class RegisterPhoneNumberPage extends StatelessWidget {
             ),
             SafeArea(
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterOtpPage()))
-                        .then((value) => Navigator.pop(context));
+                    LoadingDialogWidget.showLoading(context, _loadingKey);
+                    String result =
+                        await sendOtpService(email: _emailController.text);
+                    Navigator.of(_loadingKey.currentContext!,
+                            rootNavigator: true)
+                        .pop();
+                    if (result == "success") {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterOtpPage(
+                                      email: _emailController.text)))
+                          .then((value) => Navigator.pop(context));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ErrorDialogWidget(
+                            detail: "ເກີດຂໍ້ຜິດພາດ",
+                          );
+                        },
+                      );
+                    }
                   }
                 },
                 borderRadius: BorderRadius.only(
@@ -109,7 +133,9 @@ class RegisterPhoneNumberPage extends StatelessWidget {
                       children: [
                         Text(
                           "ຖັດໄປ",
-                          style: getRegularStyle(color: ColorConstants.black),
+                          style: getRegularStyle(
+                              color: ColorConstants.black,
+                              fontSize: FontSizes.s16),
                         ),
                         SizedBox(width: 10),
                         Icon(
