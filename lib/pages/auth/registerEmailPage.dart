@@ -2,6 +2,7 @@ import 'package:bounchan_hotel_member_app/constants/colors.dart';
 import 'package:bounchan_hotel_member_app/constants/fonts.dart';
 import 'package:bounchan_hotel_member_app/constants/styles.dart';
 import 'package:bounchan_hotel_member_app/pages/auth/registerOtpPage.dart';
+import 'package:bounchan_hotel_member_app/services/memberService.dart';
 import 'package:bounchan_hotel_member_app/services/otpService.dart';
 import 'package:bounchan_hotel_member_app/widgets/errorDialogWidget.dart';
 import 'package:bounchan_hotel_member_app/widgets/loadingDialogWidget.dart';
@@ -93,27 +94,43 @@ class RegisterEmailPage extends StatelessWidget {
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     LoadingDialogWidget.showLoading(context, _loadingKey);
-                    String result =
-                        await sendOtpService(email: _emailController.text);
-                    Navigator.of(_loadingKey.currentContext!,
-                            rootNavigator: true)
-                        .pop();
-                    if (result == "success") {
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegisterOtpPage(
-                                      email: _emailController.text)))
-                          .then((value) => Navigator.pop(context));
-                    } else {
+                    String checkEmail =
+                        await checkEmailService(email: _emailController.text);
+                    if (checkEmail == "no") {
+                      Navigator.of(_loadingKey.currentContext!,
+                              rootNavigator: true)
+                          .pop();
                       showDialog(
                         context: context,
                         builder: (context) {
                           return ErrorDialogWidget(
-                            detail: "ເກີດຂໍ້ຜິດພາດ",
+                            detail: "ອີເມລນີ້ມີຢູ່ແລ້ວ",
                           );
                         },
                       );
+                    } else {
+                      String result =
+                          await sendOtpService(email: _emailController.text);
+                      Navigator.of(_loadingKey.currentContext!,
+                              rootNavigator: true)
+                          .pop();
+                      if (result == "success") {
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterOtpPage(
+                                        email: _emailController.text)))
+                            .then((value) => Navigator.pop(context));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ErrorDialogWidget(
+                              detail: "ເກີດຂໍ້ຜິດພາດ",
+                            );
+                          },
+                        );
+                      }
                     }
                   }
                 },

@@ -194,10 +194,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             );
                           },
                         );
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()))
+                                    builder: (context) => LoginPage()),
+                                (route) => false)
                             .then((value) => Navigator.pop(context));
                       } else {
                         showDialog(

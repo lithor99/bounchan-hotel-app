@@ -14,7 +14,7 @@ class WarningDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: ColorConstants.lightGrey,
+      backgroundColor: ColorConstants.white,
       actionsPadding: EdgeInsets.all(5),
       icon: Icon(
         Icons.warning_amber_rounded,
@@ -28,7 +28,7 @@ class WarningDialogWidget extends StatelessWidget {
       content: Text(
         detail,
         textAlign: TextAlign.center,
-        style: getRegularStyle(color: ColorConstants.black),
+        style: getBoldStyle(color: ColorConstants.black),
       ),
       actionsAlignment: MainAxisAlignment.end,
       actions: [
@@ -38,7 +38,7 @@ class WarningDialogWidget extends StatelessWidget {
           },
           child: Text(
             "ຍົກເລີກ",
-            style: getRegularStyle(color: ColorConstants.black),
+            style: getBoldStyle(color: ColorConstants.black),
           ),
         ),
         TextButton(
@@ -47,7 +47,7 @@ class WarningDialogWidget extends StatelessWidget {
           },
           child: Text(
             "ຕົກລົງ",
-            style: getRegularStyle(color: ColorConstants.danger),
+            style: getBoldStyle(color: ColorConstants.info),
           ),
         ),
       ],

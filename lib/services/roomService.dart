@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 //get rooms
-Future<RoomsModel?> getRoomsService() async {
-  String url = "${BASE_URL}/room/member";
+Future<RoomsModel?> getRoomsService({String? search}) async {
+  String url = "${BASE_URL}/room/member?search=$search";
   try {
     var response = await http.get(
       Uri.parse(url),

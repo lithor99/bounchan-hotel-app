@@ -186,7 +186,7 @@ class _RoomDetailPageState extends State<RoomDetailPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 0),
                       child: SizedBox(
-                        height: 245,
+                        height: 260,
                         child: ListView.builder(
                           itemCount: _roomAsTypeModel!.result!.length,
                           shrinkWrap: true,
@@ -297,6 +297,17 @@ class _RoomDetailPageState extends State<RoomDetailPage> {
                                                   fontSize: FontSizes.s16),
                                             ),
                                           ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 0),
+                                        child: Text(
+                                          "${_roomAsTypeModel!.result![index].description.toString().length > 20 ? _roomAsTypeModel!.result![index].description.toString().substring(0, 25) + '...' : _roomAsTypeModel!.result![index].description.toString()}",
+                                          style: getRegularStyle(
+                                              color: ColorConstants.darkGrey,
+                                              fontSize: FontSizes.s12),
+                                          maxLines: 1,
                                         ),
                                       ),
                                     ],

@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
   List<String> images = [
     "assets/images/banner1.jpg",
     "assets/images/banner2.jpg",
@@ -43,8 +44,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  Future getRooms() async {
-    _roomsModel = await getRoomsService();
+  Future getRooms({String? search}) async {
+    _roomsModel = await getRoomsService(search: search);
     setState(() {});
   }
 
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _readData();
-    getRooms();
+    getRooms(search: _searchController.text);
   }
 
   @override
@@ -281,6 +282,60 @@ class _HomePageState extends State<HomePage> {
                             }).toList(),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 5, bottom: 0, right: 5, left: 5),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              if (value.isEmpty || value == "") {
+                                _searchController.clear();
+                                getRooms(search: _searchController.text);
+                              }
+                            },
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(
+                                    width: 0.5, color: ColorConstants.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(
+                                    width: 1, color: ColorConstants.white),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(
+                                    width: 0.5, color: ColorConstants.white),
+                              ),
+                              hintText: "ຄົ້ນຫາ",
+                              hintStyle: getRegularStyle(
+                                  color: ColorConstants.lightGrey),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(
+                                    width: 1, color: ColorConstants.danger),
+                              ),
+                              errorStyle:
+                                  getRegularStyle(color: ColorConstants.danger),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 20),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  getRooms(search: _searchController.text);
+                                },
+                                icon: Icon(
+                                  Icons.search_rounded,
+                                  color: ColorConstants.primary,
+                                  size: 35,
+                                ),
+                              ),
+                            ),
+                            style: getRegularStyle(color: ColorConstants.white),
+                          ),
+                        ),
                         ListView.builder(
                           itemCount: _roomsModel!.result!.length,
                           shrinkWrap: true,
@@ -294,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(
-                                      top: 15, left: 5, right: 5, bottom: 5),
+                                      top: 10, left: 5, right: 5, bottom: 5),
                                   child: Text(
                                     "${_roomsModel!.result![index].roomType!.name}",
                                     style: getBoldStyle(
@@ -305,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 0),
                                   child: SizedBox(
-                                    height: 245,
+                                    height: 260,
                                     child: ListView.builder(
                                       itemCount: _roomsModel!
                                           .result![index].rooms!.length,
@@ -382,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                                                         children: [
                                                           Text(
                                                             "ຫ້ອງເບີ: ${_roomsModel!.result![index].rooms![i].roomNo}",
-                                                            style: getRegularStyle(
+                                                            style: getBoldStyle(
                                                                 color:
                                                                     ColorConstants
                                                                         .black),
@@ -453,6 +508,21 @@ class _HomePageState extends State<HomePage> {
                                                                       .s16),
                                                         ),
                                                       ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 5,
+                                                        vertical: 0),
+                                                    child: Text(
+                                                      "${_roomsModel!.result![index].rooms![i].description.toString().length > 20 ? _roomsModel!.result![index].rooms![i].description.toString().substring(0, 25) + '...' : _roomsModel!.result![index].rooms![i].description.toString()}",
+                                                      style: getRegularStyle(
+                                                          color: ColorConstants
+                                                              .darkGrey,
+                                                          fontSize:
+                                                              FontSizes.s12),
+                                                      maxLines: 1,
                                                     ),
                                                   ),
                                                 ],

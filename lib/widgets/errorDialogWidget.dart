@@ -12,7 +12,7 @@ class ErrorDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: ColorConstants.lightGrey,
+      backgroundColor: ColorConstants.white,
       actionsPadding: EdgeInsets.all(5),
       icon: Icon(
         Icons.error_outline_rounded,
@@ -26,7 +26,7 @@ class ErrorDialogWidget extends StatelessWidget {
       content: Text(
         detail,
         textAlign: TextAlign.center,
-        style: getRegularStyle(color: ColorConstants.black),
+        style: getBoldStyle(color: ColorConstants.black),
       ),
       actionsAlignment: MainAxisAlignment.end,
       actions: [
@@ -36,7 +36,7 @@ class ErrorDialogWidget extends StatelessWidget {
           },
           child: Text(
             "ຕົກລົງ",
-            style: getRegularStyle(color: ColorConstants.black),
+            style: getBoldStyle(color: ColorConstants.info),
           ),
         ),
       ],

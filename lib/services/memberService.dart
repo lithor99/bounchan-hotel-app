@@ -133,6 +133,26 @@ Future<MemberModel?> getProfileService({required String id}) async {
   }
 }
 
+//check email
+Future<String> checkEmailService({required String email}) async {
+  String url = "${BASE_URL}/member/check/email/$email";
+  try {
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return "no";
+    } else {
+      return "yes";
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
 //update profile
 Future<String> updateProfileService({
   required String id,

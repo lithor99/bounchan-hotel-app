@@ -28,15 +28,15 @@ class _BookPageState extends State<BookPage> {
   bookBodyModel.Rooms room =
       bookBodyModel.Rooms(roomId: "", roomNo: "", price: 0);
 
-  Future getRooms() async {
-    _roomsModel = await getRoomsService();
+  Future getRooms({String? search}) async {
+    _roomsModel = await getRoomsService(search: search);
     _selectedCheckInDate = DateTime.now();
     _selectedCheckOutDate = DateTime.now().add(Duration(days: 1));
     setState(() {
       _checkInDateController.text =
           DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
       _checkOutDateController.text =
-          DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
+          DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
       _bookBodyModel.item!.checkInDate = _checkInDateController.text;
       _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
     });
@@ -97,7 +97,7 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-    getRooms();
+    getRooms(search: "");
   }
 
   @override
@@ -300,7 +300,7 @@ class _BookPageState extends State<BookPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 0),
                               child: SizedBox(
-                                height: 260,
+                                height: 280,
                                 child: ListView.builder(
                                   itemCount:
                                       _roomsModel!.result![index].rooms!.length,
@@ -438,6 +438,21 @@ class _BookPageState extends State<BookPage> {
                                                                       .s16),
                                                         ),
                                                       ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 5,
+                                                        vertical: 0),
+                                                    child: Text(
+                                                      "${_roomsModel!.result![index].rooms![i].description.toString().length > 20 ? _roomsModel!.result![index].rooms![i].description.toString().substring(0, 25) + '...' : _roomsModel!.result![index].rooms![i].description.toString()}",
+                                                      style: getRegularStyle(
+                                                          color: ColorConstants
+                                                              .darkGrey,
+                                                          fontSize:
+                                                              FontSizes.s12),
+                                                      maxLines: 1,
                                                     ),
                                                   ),
                                                 ],
