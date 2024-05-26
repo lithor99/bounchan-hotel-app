@@ -126,22 +126,62 @@ class _HistoryBookPageState extends State<HistoryBookPage> {
                                         fontSize: FontSizes.s14),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(
-                                    _booksModel!.result!.rows![index].status ==
-                                            1
-                                        ? "ສະຖານະ: ລໍຖ້າແຈ້ງເຂົ້າ"
-                                        : _booksModel!.result!.rows![index]
-                                                    .status ==
-                                                2
-                                            ? "ສະຖານະ: ລໍຖ້າແຈ້ງອອກ"
-                                            : _booksModel!.result!.rows![index]
+                                  Wrap(
+                                    children: [
+                                      Text("ສະຖານະ: ",
+                                          style: getRegularStyle(
+                                              color: ColorConstants.lightGrey,
+                                              fontSize: FontSizes.s14)),
+                                      Container(
+                                        width: 80,
+                                        padding: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                            color: _booksModel!.result!
+                                                        .rows![index].status ==
+                                                    1
+                                                ? ColorConstants.info
+                                                : _booksModel!
+                                                            .result!
+                                                            .rows![index]
+                                                            .status ==
+                                                        2
+                                                    ? ColorConstants.success
+                                                    : _booksModel!
+                                                                .result!
+                                                                .rows![index]
+                                                                .status ==
+                                                            3
+                                                        ? ColorConstants
+                                                            .darkGrey
+                                                        : ColorConstants.error,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                          child: Text(
+                                            _booksModel!.result!.rows![index]
                                                         .status ==
-                                                    3
-                                                ? "ສະຖານະ: ແຈ້ງອອກແລ້ວ"
-                                                : "ສະຖານະ: ຍົກເລີກການຈອງ",
-                                    style: getRegularStyle(
-                                        color: ColorConstants.lightGrey,
-                                        fontSize: FontSizes.s12),
+                                                    1
+                                                ? " ລໍຖ້າແຈ້ງເຂົ້າ"
+                                                : _booksModel!
+                                                            .result!
+                                                            .rows![index]
+                                                            .status ==
+                                                        2
+                                                    ? " ລໍຖ້າແຈ້ງອອກ"
+                                                    : _booksModel!
+                                                                .result!
+                                                                .rows![index]
+                                                                .status ==
+                                                            3
+                                                        ? " ແຈ້ງອອກແລ້ວ"
+                                                        : " ຍົກເລີກການຈອງ",
+                                            style: getRegularStyle(
+                                                color: ColorConstants.white,
+                                                fontSize: FontSizes.s12),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
