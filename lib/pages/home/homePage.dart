@@ -5,6 +5,7 @@ import 'package:bounchan_hotel_member_app/models/roomsModel.dart';
 import 'package:bounchan_hotel_member_app/pages/auth/loginPage.dart';
 import 'package:bounchan_hotel_member_app/pages/book/bookPage.dart';
 import 'package:bounchan_hotel_member_app/pages/history/historyBookPage.dart';
+import 'package:bounchan_hotel_member_app/pages/info/infoPage.dart';
 import 'package:bounchan_hotel_member_app/pages/profile/profilePage.dart';
 import 'package:bounchan_hotel_member_app/pages/room/roomDetailPage.dart';
 import 'package:bounchan_hotel_member_app/services/roomService.dart';
@@ -180,6 +181,23 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HistoryBookPage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.info_outline_rounded,
+                  color: ColorConstants.primary,
+                  size: 30,
+                ),
+                title: Text(
+                  "ຂໍ້ມູນຕິດຕໍ່",
+                  style: getRegularStyle(color: ColorConstants.primary),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InfoPage()),
                   );
                 },
               ),
