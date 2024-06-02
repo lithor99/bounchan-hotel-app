@@ -22,6 +22,7 @@ class _BookPageState extends State<BookPage> {
   final _checkOutDateController = TextEditingController();
   late DateTime _selectedCheckInDate;
   late DateTime _selectedCheckOutDate;
+  Duration? _totalBookDays;
   RoomsModel? _roomsModel;
   BookBodyModel _bookBodyModel = BookBodyModel(
       item: Item(checkInDate: "", checkOutDate: "", amount: 0, rooms: []));
@@ -30,6 +31,10 @@ class _BookPageState extends State<BookPage> {
 
   Future getRooms({String? search}) async {
     _roomsModel = await getRoomsService(search: search);
+    setState(() {});
+  }
+
+  Future initialDate() async {
     _selectedCheckInDate = DateTime.now();
     _selectedCheckOutDate = DateTime.now().add(Duration(days: 1));
     setState(() {
@@ -39,7 +44,9 @@ class _BookPageState extends State<BookPage> {
           DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
       _bookBodyModel.item!.checkInDate = _checkInDateController.text;
       _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
+      _totalBookDays = _selectedCheckOutDate.difference(_selectedCheckInDate);
     });
+    print("--------------------->>>>${_totalBookDays!.inDays}");
   }
 
   Future<void> _selectCheckInDateFunction(BuildContext context) async {
@@ -49,54 +56,98 @@ class _BookPageState extends State<BookPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-    if (picked != null && picked != _selectedCheckInDate) {
-      setState(() {
-        _selectedCheckInDate = picked;
-        _checkInDateController.text =
-            DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
-        _bookBodyModel.item!.checkInDate = _checkInDateController.text;
-        if (_selectedCheckInDate.isAfter(DateTime(
-            int.parse(_checkOutDateController.text.substring(0, 4)),
-            int.parse(_checkOutDateController.text.substring(5, 7)),
-            int.parse(_checkOutDateController.text.substring(8, 10))))) {
-          _selectedCheckOutDate = _selectedCheckInDate.add(Duration(days: 1));
-          _checkOutDateController.text =
-              DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
-          _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
-        }
-      });
-    }
+    // if (picked != null && picked != _selectedCheckInDate) {
+    getRooms(search: "");
+    setState(() {
+      _bookBodyModel.item!.amount = 0;
+      // _bookBodyModel.item!.checkOutDate=null;
+      // _bookBodyModel.item!.checkInDate=null;
+      _bookBodyModel.item!.rooms!.clear();
+      _selectedCheckInDate = picked!;
+      _checkInDateController.text =
+          DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
+      _bookBodyModel.item!.checkInDate = _checkInDateController.text;
+      if (_selectedCheckInDate
+              .difference(DateTime(
+                  int.parse(_checkOutDateController.text.substring(0, 4)),
+                  int.parse(_checkOutDateController.text.substring(5, 7)),
+                  int.parse(_checkOutDateController.text.substring(8, 10))))
+              .inDays >=
+          0) {
+        _selectedCheckOutDate = _selectedCheckInDate.add(Duration(days: 1));
+        _checkOutDateController.text =
+            DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
+        _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
+        _totalBookDays = (DateTime(
+                int.parse(_checkOutDateController.text.substring(0, 4)),
+                int.parse(_checkOutDateController.text.substring(5, 7)),
+                int.parse(_checkOutDateController.text.substring(8, 10))))
+            .difference(_selectedCheckInDate);
+      }
+      _totalBookDays = DateTime(
+              int.parse(_checkOutDateController.text.substring(0, 4)),
+              int.parse(_checkOutDateController.text.substring(5, 7)),
+              int.parse(_checkOutDateController.text.substring(8, 10)))
+          .difference((DateTime(
+              int.parse(_checkInDateController.text.substring(0, 4)),
+              int.parse(_checkInDateController.text.substring(5, 7)),
+              int.parse(_checkInDateController.text.substring(8, 10)))));
+      print("--------------------->>>>${_totalBookDays!.inDays}");
+    });
+    // }
   }
 
   Future<void> _selectCheckOutDateFunction(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedCheckOutDate,
-      firstDate: DateTime.now(),
+      firstDate: DateTime.now().add(Duration(days: 1)),
       lastDate: DateTime(2100),
     );
-    if (picked != null && picked != _selectedCheckOutDate) {
-      setState(() {
-        _selectedCheckOutDate = picked;
-        _checkOutDateController.text =
-            DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
-        _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
-        if (_selectedCheckOutDate.isBefore(DateTime(
+    // if (picked != null && picked != _selectedCheckOutDate) {
+    getRooms(search: "");
+    setState(() {
+      _bookBodyModel.item!.amount = 0;
+      // _bookBodyModel.item!.checkOutDate=null;
+      // _bookBodyModel.item!.checkInDate=null;
+      _bookBodyModel.item!.rooms!.clear();
+      _selectedCheckOutDate = picked!;
+      _checkOutDateController.text =
+          DateFormat('yyyy-MM-dd').format(_selectedCheckOutDate);
+      _bookBodyModel.item!.checkOutDate = _checkOutDateController.text;
+      if (_selectedCheckOutDate
+              .difference(DateTime(
+                  int.parse(_checkInDateController.text.substring(0, 4)),
+                  int.parse(_checkInDateController.text.substring(5, 7)),
+                  int.parse(_checkInDateController.text.substring(8, 10))))
+              .inDays <
+          1) {
+        _selectedCheckInDate = _selectedCheckOutDate.add(Duration(days: -1));
+        _checkInDateController.text =
+            DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
+        _bookBodyModel.item!.checkInDate = _checkInDateController.text;
+        _totalBookDays = _selectedCheckOutDate.difference(DateTime(
             int.parse(_checkInDateController.text.substring(0, 4)),
             int.parse(_checkInDateController.text.substring(5, 7)),
-            int.parse(_checkInDateController.text.substring(8, 10))))) {
-          _selectedCheckInDate = _selectedCheckOutDate.add(Duration(days: -1));
-          _checkInDateController.text =
-              DateFormat('yyyy-MM-dd').format(_selectedCheckInDate);
-          _bookBodyModel.item!.checkInDate = _checkInDateController.text;
-        }
-      });
-    }
+            int.parse(_checkInDateController.text.substring(8, 10))));
+      }
+      _totalBookDays = DateTime(
+              int.parse(_checkOutDateController.text.substring(0, 4)),
+              int.parse(_checkOutDateController.text.substring(5, 7)),
+              int.parse(_checkOutDateController.text.substring(8, 10)))
+          .difference((DateTime(
+              int.parse(_checkInDateController.text.substring(0, 4)),
+              int.parse(_checkInDateController.text.substring(5, 7)),
+              int.parse(_checkInDateController.text.substring(8, 10)))));
+      print("--------------------->>>>${_totalBookDays!.inDays}");
+    });
+    // }
   }
 
   @override
   void initState() {
     super.initState();
+    initialDate();
     getRooms(search: "");
   }
 
@@ -476,7 +527,12 @@ class _BookPageState extends State<BookPage> {
                                                                 .lastCheckOut
                                                                 .substring(
                                                                     0, 4)),
-                                                            int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                            int.parse(_roomsModel!
+                                                                .result![index]
+                                                                .rooms![i]
+                                                                .lastCheckOut
+                                                                .substring(
+                                                                    5, 7)),
                                                             int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10))))
                                                         ? Checkbox(
                                                             value: _roomsModel!.result![index].rooms![i].checked ?? false,
@@ -504,11 +560,13 @@ class _BookPageState extends State<BookPage> {
                                                                         .item!
                                                                         .amount! +
                                                                     _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price!;
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .price! *
+                                                                        _totalBookDays!
+                                                                            .inDays;
                                                                 room = bookBodyModel
                                                                     .Rooms(
                                                                         roomId:
@@ -536,8 +594,9 @@ class _BookPageState extends State<BookPage> {
                                                                             index]
                                                                         .rooms![
                                                                             i]
-                                                                        .price ??
-                                                                    0;
+                                                                        .price! *
+                                                                    _totalBookDays!
+                                                                        .inDays;
                                                                 _bookBodyModel
                                                                     .item!
                                                                     .rooms!
@@ -549,11 +608,13 @@ class _BookPageState extends State<BookPage> {
                                                                         .item!
                                                                         .amount! -
                                                                     _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price!;
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .price! *
+                                                                        _totalBookDays!
+                                                                            .inDays;
                                                                 if (_bookBodyModel
                                                                         .item!
                                                                         .amount! <
@@ -589,8 +650,9 @@ class _BookPageState extends State<BookPage> {
                                                                             index]
                                                                         .rooms![
                                                                             i]
-                                                                        .price ??
-                                                                    0;
+                                                                        .price! *
+                                                                    _totalBookDays!
+                                                                        .inDays;
                                                                 _bookBodyModel
                                                                     .item!
                                                                     .rooms!
@@ -634,16 +696,17 @@ class _BookPageState extends State<BookPage> {
                                                         onChanged: (value) {
                                                           if (value!) {
                                                             _bookBodyModel.item!
-                                                                    .amount =
-                                                                _bookBodyModel
-                                                                        .item!
-                                                                        .amount! +
-                                                                    _roomsModel!
+                                                                .amount = _bookBodyModel
+                                                                    .item!
+                                                                    .amount! +
+                                                                _roomsModel!
                                                                         .result![
                                                                             index]
                                                                         .rooms![
                                                                             i]
-                                                                        .price!;
+                                                                        .price! *
+                                                                    _totalBookDays!
+                                                                        .inDays;
                                                             room = bookBodyModel
                                                                 .Rooms(
                                                                     roomId: "",
@@ -661,29 +724,29 @@ class _BookPageState extends State<BookPage> {
                                                                         index]
                                                                     .rooms![i]
                                                                     .roomNo!;
-                                                            room.price =
-                                                                _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price ??
-                                                                    0;
+                                                            room.price = _roomsModel!
+                                                                    .result![
+                                                                        index]
+                                                                    .rooms![i]
+                                                                    .price! *
+                                                                _totalBookDays!
+                                                                    .inDays;
                                                             _bookBodyModel
                                                                 .item!.rooms!
                                                                 .add(room);
                                                           } else {
                                                             _bookBodyModel.item!
-                                                                    .amount =
-                                                                _bookBodyModel
-                                                                        .item!
-                                                                        .amount! -
-                                                                    _roomsModel!
+                                                                .amount = _bookBodyModel
+                                                                    .item!
+                                                                    .amount! -
+                                                                _roomsModel!
                                                                         .result![
                                                                             index]
                                                                         .rooms![
                                                                             i]
-                                                                        .price!;
+                                                                        .price! *
+                                                                    _totalBookDays!
+                                                                        .inDays;
                                                             if (_bookBodyModel
                                                                     .item!
                                                                     .amount! <
@@ -697,26 +760,26 @@ class _BookPageState extends State<BookPage> {
                                                                     roomId: "",
                                                                     roomNo: "",
                                                                     price: 0);
-                                                            room.roomId =
-                                                                _roomsModel!
+                                                            room.roomId = _roomsModel!
                                                                     .result![
                                                                         index]
                                                                     .rooms![i]
-                                                                    .id!;
+                                                                    .id! *
+                                                                _totalBookDays!
+                                                                    .inDays;
                                                             room.roomNo =
                                                                 _roomsModel!
                                                                     .result![
                                                                         index]
                                                                     .rooms![i]
                                                                     .roomNo!;
-                                                            room.price =
-                                                                _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price ??
-                                                                    0;
+                                                            room.price = _roomsModel!
+                                                                    .result![
+                                                                        index]
+                                                                    .rooms![i]
+                                                                    .price! *
+                                                                _totalBookDays!
+                                                                    .inDays;
                                                             _bookBodyModel
                                                                 .item!.rooms!
                                                                 .removeWhere((item) =>
@@ -775,7 +838,9 @@ class _BookPageState extends State<BookPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => BookDetailPage(
-                                    bookBodyModel: _bookBodyModel)),
+                                      bookBodyModel: _bookBodyModel,
+                                      totalBookDays: _totalBookDays!.inDays,
+                                    )),
                           );
                         },
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),

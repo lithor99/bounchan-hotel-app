@@ -60,7 +60,7 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                            "${_bookModel!.result!.createdAt!.substring(0, 10)}",
+                            "${DateTime.parse(_bookModel!.result!.createdAt!).toLocal().toString().substring(0, 10)}",
                             style: getRegularStyle(
                                 fontSize: FontSizes.s14,
                                 color: ColorConstants.black)),
@@ -83,7 +83,7 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                         Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: Text(
-                              "${_bookModel!.result!.createdAt!.substring(11, 19)}",
+                              "${DateTime.parse(_bookModel!.result!.createdAt!).toLocal().toString().substring(11, 19)}",
                               style: getRegularStyle(
                                   fontSize: FontSizes.s14,
                                   color: ColorConstants.black)),
@@ -93,15 +93,22 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                     SizedBox(height: 20),
                     Text(
                         _bookModel!.result!.status == 1
-                            ? "ສະຖານະ: ລໍຖ້າແຈ້ງເຂົ້າ"
+                            ? " ລໍຖ້າແຈ້ງເຂົ້າ"
                             : _bookModel!.result!.status == 2
-                                ? "ສະຖານະ: ລໍຖ້າແຈ້ງອອກ"
+                                ? " ລໍຖ້າແຈ້ງອອກ"
                                 : _bookModel!.result!.status == 3
-                                    ? "ສະຖານະ: ແຈ້ງອອກແລ້ວ"
-                                    : "ສະຖານະ: ຍົກເລີກການຈອງ",
+                                    ? " ແຈ້ງອອກແລ້ວ"
+                                    : " ຍົກເລີກການຈອງ",
                         style: getBoldStyle(
-                            fontSize: FontSizes.s18,
-                            color: ColorConstants.error)),
+                          fontSize: FontSizes.s18,
+                          color: _bookModel!.result!.status == 1
+                              ? ColorConstants.info
+                              : _bookModel!.result!.status == 2
+                                  ? ColorConstants.success
+                                  : _bookModel!.result!.status == 3
+                                      ? ColorConstants.black
+                                      : ColorConstants.error,
+                        )),
                     SizedBox(height: 20),
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,

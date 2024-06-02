@@ -59,7 +59,7 @@ class _BookSuccessPageState extends State<BookSuccessPage> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                            "${_bookModel!.result!.createdAt!.substring(0, 10)}",
+                            "${DateTime.parse(_bookModel!.result!.createdAt!).toLocal().toString().substring(0, 10)}",
                             style: getRegularStyle(
                                 fontSize: FontSizes.s14,
                                 color: ColorConstants.black)),
@@ -82,7 +82,7 @@ class _BookSuccessPageState extends State<BookSuccessPage> {
                         Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: Text(
-                              "${_bookModel!.result!.createdAt!.substring(11, 19)}",
+                              "${DateTime.parse(_bookModel!.result!.createdAt!).toLocal().toString().substring(11, 19)}",
                               style: getRegularStyle(
                                   fontSize: FontSizes.s14,
                                   color: ColorConstants.black)),
