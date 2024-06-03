@@ -33,9 +33,9 @@ class _HomePageState extends State<HomePage> {
   ];
 
   String? _image;
-  String? _name;
-  String? _email;
-  String? _phoneNumber;
+  String _name = "";
+  String _email = "";
+  String _phoneNumber = "";
   RoomsModel? _roomsModel;
   Future _readData() async {
     _name = await StorageManager.readData("name");
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(width: 20),
                       Text(
-                        "${_name!.length > 15 ? _name!.substring(0, 15) + '...' : _name}\n${_email!.length > 15 ? _email!.substring(0, 3) + '...' + _email!.split("@")[0].substring(_email!.split("@")[0].length - 2, _email!.split("@")[0].length) + '@' + _email!.split("@")[1] : _email}\n$_phoneNumber",
+                        "${_name.length > 15 ? _name.substring(0, 15) + '...' : _name}\n${_email.length > 15 ? _email.substring(0, 3) + '...' + _email.split("@")[0].substring(_email.split("@")[0].length - 2, _email.split("@")[0].length) + '@' + _email.split("@")[1] : _email}\n$_phoneNumber",
                         style: getRegularStyle(
                             fontSize: FontSizes.s14,
                             color: ColorConstants.primary),
@@ -445,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                                                     width: 180,
                                                     child: Padding(
                                                       padding: const EdgeInsets
-                                                          .symmetric(
+                                                              .symmetric(
                                                           horizontal: 5,
                                                           vertical: 5),
                                                       child: Row(
@@ -500,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
-                                                        .symmetric(
+                                                            .symmetric(
                                                         horizontal: 5,
                                                         vertical: 0),
                                                     child: Wrap(
@@ -530,7 +530,7 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
-                                                        .symmetric(
+                                                            .symmetric(
                                                         horizontal: 5,
                                                         vertical: 0),
                                                     child: Text(

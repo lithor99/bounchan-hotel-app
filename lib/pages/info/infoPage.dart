@@ -32,7 +32,7 @@ class InfoPage extends StatelessWidget {
             SizedBox(height: 20),
             Text("ໂຮງແຮມ ບຸນຈັນ", style: getBoldStyle(fontSize: FontSizes.s20)),
             SizedBox(height: 30),
-            Divider(color: ColorConstants.white),
+            Divider(color: ColorConstants.lightGrey),
             Row(
               children: [
                 CircleAvatar(
@@ -69,7 +69,7 @@ class InfoPage extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: ColorConstants.white),
+            Divider(color: ColorConstants.lightGrey),
             Row(
               children: [
                 CircleAvatar(
@@ -106,7 +106,7 @@ class InfoPage extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: ColorConstants.white),
+            Divider(color: ColorConstants.lightGrey),
             Row(
               children: [
                 CircleAvatar(
@@ -143,7 +143,7 @@ class InfoPage extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: ColorConstants.white),
+            Divider(color: ColorConstants.lightGrey),
             Row(
               children: [
                 CircleAvatar(
@@ -180,7 +180,7 @@ class InfoPage extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: ColorConstants.white),
+            Divider(color: ColorConstants.lightGrey),
           ],
         ),
       ),
