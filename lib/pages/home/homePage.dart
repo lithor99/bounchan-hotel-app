@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                     context: context,
                     builder: (context) {
                       return WarningDialogWidget(
-                        detail: "ທ່ານຕ້ອງອອກຈາກລະບົບບໍ?",
+                        detail: "ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ?",
                         onConfirm: () {
                           StorageManager.deleteData("id");
                           StorageManager.deleteData("name");
