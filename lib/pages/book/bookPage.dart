@@ -425,33 +425,56 @@ class _BookPageState extends State<BookPage> {
                                                             height: 25,
                                                             width: 50,
                                                             decoration: BoxDecoration(
-                                                                color: _roomsModel!.result![index].rooms![i].status == 3
-                                                                    ? ColorConstants.danger
-                                                                    : _roomsModel!.result![index].rooms![i].status == 2
-                                                                        ? _selectedCheckInDate.isAfter(DateTime(int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)), int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)), int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10))))
-                                                                            ? ColorConstants.success
-                                                                            : ColorConstants.danger
-                                                                        : ColorConstants.success,
+                                                                color: _roomsModel!.result![index].rooms![i].lastCheckIn == null || _roomsModel!.result![index].rooms![i].lastCheckOut == null
+                                                                    ? ColorConstants.success
+                                                                    : _roomsModel!.result![index].rooms![i].status == 3
+                                                                        ? ColorConstants.danger
+                                                                        : _roomsModel!.result![index].rooms![i].status == 2
+                                                                            ? _selectedCheckOutDate.isBefore(
+                                                                                DateTime(
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
+                                                                                ),
+                                                                              )
+                                                                                ? ColorConstants.success
+                                                                                : _selectedCheckInDate.isAfter(DateTime(
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
+                                                                                  ))
+                                                                                    ? ColorConstants.success
+                                                                                    : ColorConstants.danger
+                                                                            : ColorConstants.success,
                                                                 borderRadius: BorderRadius.circular(12)),
                                                             child: Center(
                                                               child: Text(
-                                                                _roomsModel!
-                                                                            .result![
-                                                                                index]
-                                                                            .rooms![
-                                                                                i]
-                                                                            .status ==
-                                                                        3
-                                                                    ? "ບໍ່ຫວ່າງ"
+                                                                _roomsModel!.result![index].rooms![i].lastCheckIn ==
+                                                                            null ||
+                                                                        _roomsModel!.result![index].rooms![i].lastCheckOut ==
+                                                                            null
+                                                                    ? "ຫວ່າງ"
                                                                     : _roomsModel!.result![index].rooms![i].status ==
-                                                                            2
-                                                                        ? _selectedCheckInDate.isAfter(DateTime(
-                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
-                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
-                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10))))
-                                                                            ? "ຫວ່າງ"
-                                                                            : "ບໍ່ຫວ່າງ"
-                                                                        : "ຫວ່າງ",
+                                                                            3
+                                                                        ? "ບໍ່ຫວ່າງ"
+                                                                        : _roomsModel!.result![index].rooms![i].status ==
+                                                                                2
+                                                                            ? _selectedCheckOutDate.isBefore(
+                                                                                DateTime(
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
+                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
+                                                                                ),
+                                                                              )
+                                                                                ? "ຫວ່າງ"
+                                                                                : _selectedCheckInDate.isAfter(DateTime(
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
+                                                                                  ))
+                                                                                    ? "ຫວ່າງ"
+                                                                                    : "ບໍ່ຫວ່າງ"
+                                                                            : "ຫວ່າງ",
                                                                 style:
                                                                     getRegularStyle(),
                                                               ),

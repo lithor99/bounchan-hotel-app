@@ -461,39 +461,39 @@ class _HomePageState extends State<HomePage> {
                                                                         .black),
                                                           ),
                                                           SizedBox(width: 20),
-                                                          Container(
-                                                            height: 25,
-                                                            width: 50,
-                                                            decoration: BoxDecoration(
-                                                                color: _roomsModel!
-                                                                            .result![
-                                                                                index]
-                                                                            .rooms![
-                                                                                i]
-                                                                            .status ==
-                                                                        3
-                                                                    ? ColorConstants
-                                                                        .danger
-                                                                    : ColorConstants
-                                                                        .success,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            12)),
-                                                            child: Center(
-                                                              child: Text(
-                                                                _roomsModel!
-                                                                            .result![index]
-                                                                            .rooms![i]
-                                                                            .status ==
-                                                                        3
-                                                                    ? "ບໍ່ຫວ່າງ"
-                                                                    : "ຫວ່າງ",
-                                                                style:
-                                                                    getRegularStyle(),
-                                                              ),
-                                                            ),
-                                                          ),
+                                                          // Container(
+                                                          //   height: 25,
+                                                          //   width: 50,
+                                                          //   decoration: BoxDecoration(
+                                                          //       color: _roomsModel!
+                                                          //                   .result![
+                                                          //                       index]
+                                                          //                   .rooms![
+                                                          //                       i]
+                                                          //                   .status ==
+                                                          //               3
+                                                          //           ? ColorConstants
+                                                          //               .danger
+                                                          //           : ColorConstants
+                                                          //               .success,
+                                                          //       borderRadius:
+                                                          //           BorderRadius
+                                                          //               .circular(
+                                                          //                   12)),
+                                                          //   child: Center(
+                                                          //     child: Text(
+                                                          //       _roomsModel!
+                                                          //                   .result![index]
+                                                          //                   .rooms![i]
+                                                          //                   .status ==
+                                                          //               3
+                                                          //           ? "ບໍ່ຫວ່າງ"
+                                                          //           : "ຫວ່າງ",
+                                                          //       style:
+                                                          //           getRegularStyle(),
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),
