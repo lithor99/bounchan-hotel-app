@@ -425,56 +425,54 @@ class _BookPageState extends State<BookPage> {
                                                             height: 25,
                                                             width: 50,
                                                             decoration: BoxDecoration(
-                                                                color: _roomsModel!.result![index].rooms![i].lastCheckIn == null || _roomsModel!.result![index].rooms![i].lastCheckOut == null
-                                                                    ? ColorConstants.success
-                                                                    : _roomsModel!.result![index].rooms![i].status == 3
-                                                                        ? ColorConstants.danger
-                                                                        : _roomsModel!.result![index].rooms![i].status == 2
-                                                                            ? _selectedCheckOutDate.isBefore(
-                                                                                DateTime(
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
-                                                                                ),
-                                                                              )
+                                                                color: _roomsModel!.result![index].rooms![i].status == 3
+                                                                    ? ColorConstants.danger
+                                                                    : _roomsModel!.result![index].rooms![i].status == 2
+                                                                        ? _selectedCheckOutDate.isBefore(
+                                                                            DateTime(
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
+                                                                            ),
+                                                                          )
+                                                                            ? ColorConstants.success
+                                                                            : _selectedCheckInDate.isAfter(DateTime(
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
+                                                                              ))
                                                                                 ? ColorConstants.success
-                                                                                : _selectedCheckInDate.isAfter(DateTime(
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
-                                                                                  ))
-                                                                                    ? ColorConstants.success
-                                                                                    : ColorConstants.danger
-                                                                            : ColorConstants.success,
+                                                                                : ColorConstants.danger
+                                                                        : ColorConstants.success,
                                                                 borderRadius: BorderRadius.circular(12)),
                                                             child: Center(
                                                               child: Text(
-                                                                _roomsModel!.result![index].rooms![i].lastCheckIn ==
-                                                                            null ||
-                                                                        _roomsModel!.result![index].rooms![i].lastCheckOut ==
-                                                                            null
-                                                                    ? "ຫວ່າງ"
+                                                                _roomsModel!
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .status ==
+                                                                        3
+                                                                    ? "ບໍ່ຫວ່າງ"
                                                                     : _roomsModel!.result![index].rooms![i].status ==
-                                                                            3
-                                                                        ? "ບໍ່ຫວ່າງ"
-                                                                        : _roomsModel!.result![index].rooms![i].status ==
-                                                                                2
-                                                                            ? _selectedCheckOutDate.isBefore(
-                                                                                DateTime(
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
-                                                                                  int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
-                                                                                ),
-                                                                              )
+                                                                            2
+                                                                        ? _selectedCheckOutDate.isBefore(
+                                                                            DateTime(
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(0, 4)),
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(5, 7)),
+                                                                              int.parse(_roomsModel!.result![index].rooms![i].lastCheckIn.substring(8, 10)),
+                                                                            ),
+                                                                          )
+                                                                            ? "ຫວ່າງ"
+                                                                            : _selectedCheckInDate.isAfter(DateTime(
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                                                int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
+                                                                              ))
                                                                                 ? "ຫວ່າງ"
-                                                                                : _selectedCheckInDate.isAfter(DateTime(
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(0, 4)),
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
-                                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10)),
-                                                                                  ))
-                                                                                    ? "ຫວ່າງ"
-                                                                                    : "ບໍ່ຫວ່າງ"
-                                                                            : "ຫວ່າງ",
+                                                                                : "ບໍ່ຫວ່າງ"
+                                                                        : "ຫວ່າງ",
                                                                 style:
                                                                     getRegularStyle(),
                                                               ),
@@ -536,28 +534,287 @@ class _BookPageState extends State<BookPage> {
                                           Positioned(
                                             bottom: 0,
                                             right: 0,
-                                            child: _roomsModel!.result![index]
-                                                        .rooms![i].status ==
-                                                    3
-                                                ? SizedBox()
-                                                : _roomsModel!.result![index]
+                                            child:
+                                                _roomsModel!.result![index]
                                                             .rooms![i].status ==
-                                                        2
-                                                    ? _selectedCheckInDate.isAfter(DateTime(
-                                                            int.parse(_roomsModel!
+                                                        3
+                                                    ? SizedBox()
+                                                    : _roomsModel!
                                                                 .result![index]
                                                                 .rooms![i]
-                                                                .lastCheckOut
-                                                                .substring(
-                                                                    0, 4)),
-                                                            int.parse(_roomsModel!
-                                                                .result![index]
-                                                                .rooms![i]
-                                                                .lastCheckOut
-                                                                .substring(
-                                                                    5, 7)),
-                                                            int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10))))
-                                                        ? Checkbox(
+                                                                .status ==
+                                                            2
+                                                        ? _selectedCheckOutDate
+                                                                .isBefore(
+                                                            DateTime(
+                                                              int.parse(
+                                                                  _roomsModel!
+                                                                      .result![
+                                                                          index]
+                                                                      .rooms![i]
+                                                                      .lastCheckIn
+                                                                      .substring(
+                                                                          0,
+                                                                          4)),
+                                                              int.parse(
+                                                                  _roomsModel!
+                                                                      .result![
+                                                                          index]
+                                                                      .rooms![i]
+                                                                      .lastCheckIn
+                                                                      .substring(
+                                                                          5,
+                                                                          7)),
+                                                              int.parse(
+                                                                  _roomsModel!
+                                                                      .result![
+                                                                          index]
+                                                                      .rooms![i]
+                                                                      .lastCheckIn
+                                                                      .substring(
+                                                                          8,
+                                                                          10)),
+                                                            ),
+                                                          )
+                                                            ? Checkbox(
+                                                                value: _roomsModel!.result![index].rooms![i].checked ??
+                                                                    false,
+                                                                fillColor: MaterialStateProperty.resolveWith(
+                                                                    (states) {
+                                                                  if (!states.contains(
+                                                                      MaterialState
+                                                                          .selected)) {
+                                                                    return ColorConstants
+                                                                        .black;
+                                                                  }
+                                                                  return null;
+                                                                }),
+                                                                visualDensity:
+                                                                    VisualDensity(
+                                                                  horizontal:
+                                                                      -3.0,
+                                                                  vertical:
+                                                                      -3.0,
+                                                                ),
+                                                                materialTapTargetSize:
+                                                                    MaterialTapTargetSize
+                                                                        .shrinkWrap,
+                                                                activeColor:
+                                                                    ColorConstants
+                                                                        .black,
+                                                                checkColor: ColorConstants
+                                                                    .white,
+                                                                onChanged:
+                                                                    (value) {
+                                                                  if (value!) {
+                                                                    _bookBodyModel
+                                                                        .item!
+                                                                        .amount = _bookBodyModel
+                                                                            .item!
+                                                                            .amount! +
+                                                                        _roomsModel!.result![index].rooms![i].price! *
+                                                                            _totalBookDays!.inDays;
+                                                                    room = bookBodyModel.Rooms(
+                                                                        roomId:
+                                                                            "",
+                                                                        roomNo:
+                                                                            "",
+                                                                        price:
+                                                                            0);
+                                                                    room.roomId = _roomsModel!
+                                                                        .result![
+                                                                            index]
+                                                                        .rooms![
+                                                                            i]
+                                                                        .id!;
+                                                                    room.roomNo = _roomsModel!
+                                                                        .result![
+                                                                            index]
+                                                                        .rooms![
+                                                                            i]
+                                                                        .roomNo!;
+                                                                    room.price = _roomsModel!
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .price! *
+                                                                        _totalBookDays!
+                                                                            .inDays;
+                                                                    _bookBodyModel
+                                                                        .item!
+                                                                        .rooms!
+                                                                        .add(
+                                                                            room);
+                                                                  } else {
+                                                                    _bookBodyModel
+                                                                        .item!
+                                                                        .amount = _bookBodyModel
+                                                                            .item!
+                                                                            .amount! -
+                                                                        _roomsModel!.result![index].rooms![i].price! *
+                                                                            _totalBookDays!.inDays;
+                                                                    if (_bookBodyModel
+                                                                            .item!
+                                                                            .amount! <
+                                                                        0) {
+                                                                      _bookBodyModel
+                                                                          .item!
+                                                                          .amount = 0;
+                                                                    }
+                                                                    room = bookBodyModel.Rooms(
+                                                                        roomId:
+                                                                            "",
+                                                                        roomNo:
+                                                                            "",
+                                                                        price:
+                                                                            0);
+                                                                    room.roomId = _roomsModel!
+                                                                        .result![
+                                                                            index]
+                                                                        .rooms![
+                                                                            i]
+                                                                        .id!;
+                                                                    room.roomNo = _roomsModel!
+                                                                        .result![
+                                                                            index]
+                                                                        .rooms![
+                                                                            i]
+                                                                        .roomNo!;
+                                                                    room.price = _roomsModel!
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .price! *
+                                                                        _totalBookDays!
+                                                                            .inDays;
+                                                                    _bookBodyModel
+                                                                        .item!
+                                                                        .rooms!
+                                                                        .removeWhere((item) =>
+                                                                            item.roomNo ==
+                                                                            room.roomNo);
+                                                                  }
+                                                                  setState(() {
+                                                                    _roomsModel!
+                                                                            .result![
+                                                                                index]
+                                                                            .rooms![
+                                                                                i]
+                                                                            .checked =
+                                                                        !_roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .checked!;
+                                                                  });
+                                                                })
+                                                            : _selectedCheckInDate.isAfter(DateTime(
+                                                                    int.parse(_roomsModel!
+                                                                        .result![index]
+                                                                        .rooms![i]
+                                                                        .lastCheckOut
+                                                                        .substring(0, 4)),
+                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(5, 7)),
+                                                                    int.parse(_roomsModel!.result![index].rooms![i].lastCheckOut.substring(8, 10))))
+                                                                ? Checkbox(
+                                                                    value: _roomsModel!.result![index].rooms![i].checked ?? false,
+                                                                    fillColor: MaterialStateProperty.resolveWith((states) {
+                                                                      if (!states
+                                                                          .contains(
+                                                                              MaterialState.selected)) {
+                                                                        return ColorConstants
+                                                                            .black;
+                                                                      }
+                                                                      return null;
+                                                                    }),
+                                                                    visualDensity: VisualDensity(
+                                                                      horizontal:
+                                                                          -3.0,
+                                                                      vertical:
+                                                                          -3.0,
+                                                                    ),
+                                                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                                    activeColor: ColorConstants.black,
+                                                                    checkColor: ColorConstants.white,
+                                                                    onChanged: (value) {
+                                                                      if (value!) {
+                                                                        _bookBodyModel
+                                                                            .item!
+                                                                            .amount = _bookBodyModel
+                                                                                .item!.amount! +
+                                                                            _roomsModel!.result![index].rooms![i].price! *
+                                                                                _totalBookDays!.inDays;
+                                                                        room = bookBodyModel.Rooms(
+                                                                            roomId:
+                                                                                "",
+                                                                            roomNo:
+                                                                                "",
+                                                                            price:
+                                                                                0);
+                                                                        room.roomId = _roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .id!;
+                                                                        room.roomNo = _roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .roomNo!;
+                                                                        room.price =
+                                                                            _roomsModel!.result![index].rooms![i].price! *
+                                                                                _totalBookDays!.inDays;
+                                                                        _bookBodyModel
+                                                                            .item!
+                                                                            .rooms!
+                                                                            .add(room);
+                                                                      } else {
+                                                                        _bookBodyModel
+                                                                            .item!
+                                                                            .amount = _bookBodyModel
+                                                                                .item!.amount! -
+                                                                            _roomsModel!.result![index].rooms![i].price! *
+                                                                                _totalBookDays!.inDays;
+                                                                        if (_bookBodyModel.item!.amount! <
+                                                                            0) {
+                                                                          _bookBodyModel
+                                                                              .item!
+                                                                              .amount = 0;
+                                                                        }
+                                                                        room = bookBodyModel.Rooms(
+                                                                            roomId:
+                                                                                "",
+                                                                            roomNo:
+                                                                                "",
+                                                                            price:
+                                                                                0);
+                                                                        room.roomId = _roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .id!;
+                                                                        room.roomNo = _roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .roomNo!;
+                                                                        room.price =
+                                                                            _roomsModel!.result![index].rooms![i].price! *
+                                                                                _totalBookDays!.inDays;
+                                                                        _bookBodyModel
+                                                                            .item!
+                                                                            .rooms!
+                                                                            .removeWhere((item) =>
+                                                                                item.roomNo ==
+                                                                                room.roomNo);
+                                                                      }
+                                                                      setState(
+                                                                          () {
+                                                                        _roomsModel!
+                                                                            .result![index]
+                                                                            .rooms![i]
+                                                                            .checked = !_roomsModel!.result![index].rooms![i].checked!;
+                                                                      });
+                                                                    })
+                                                                : SizedBox()
+                                                        : Checkbox(
                                                             value: _roomsModel!.result![index].rooms![i].checked ?? false,
                                                             fillColor: MaterialStateProperty.resolveWith((states) {
                                                               if (!states.contains(
@@ -654,13 +911,14 @@ class _BookPageState extends State<BookPage> {
                                                                             "",
                                                                         price:
                                                                             0);
-                                                                room.roomId =
-                                                                    _roomsModel!
+                                                                room.roomId = _roomsModel!
                                                                         .result![
                                                                             index]
                                                                         .rooms![
                                                                             i]
-                                                                        .id!;
+                                                                        .id! *
+                                                                    _totalBookDays!
+                                                                        .inDays;
                                                                 room.roomNo =
                                                                     _roomsModel!
                                                                         .result![
@@ -696,131 +954,7 @@ class _BookPageState extends State<BookPage> {
                                                                             i]
                                                                         .checked!;
                                                               });
-                                                            })
-                                                        : SizedBox()
-                                                    : Checkbox(
-                                                        value: _roomsModel!.result![index].rooms![i].checked ?? false,
-                                                        fillColor: MaterialStateProperty.resolveWith((states) {
-                                                          if (!states.contains(
-                                                              MaterialState
-                                                                  .selected)) {
-                                                            return ColorConstants
-                                                                .black;
-                                                          }
-                                                          return null;
-                                                        }),
-                                                        visualDensity: VisualDensity(
-                                                          horizontal: -3.0,
-                                                          vertical: -3.0,
-                                                        ),
-                                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                        activeColor: ColorConstants.black,
-                                                        checkColor: ColorConstants.white,
-                                                        onChanged: (value) {
-                                                          if (value!) {
-                                                            _bookBodyModel.item!
-                                                                .amount = _bookBodyModel
-                                                                    .item!
-                                                                    .amount! +
-                                                                _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price! *
-                                                                    _totalBookDays!
-                                                                        .inDays;
-                                                            room = bookBodyModel
-                                                                .Rooms(
-                                                                    roomId: "",
-                                                                    roomNo: "",
-                                                                    price: 0);
-                                                            room.roomId =
-                                                                _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .id!;
-                                                            room.roomNo =
-                                                                _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .roomNo!;
-                                                            room.price = _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .price! *
-                                                                _totalBookDays!
-                                                                    .inDays;
-                                                            _bookBodyModel
-                                                                .item!.rooms!
-                                                                .add(room);
-                                                          } else {
-                                                            _bookBodyModel.item!
-                                                                .amount = _bookBodyModel
-                                                                    .item!
-                                                                    .amount! -
-                                                                _roomsModel!
-                                                                        .result![
-                                                                            index]
-                                                                        .rooms![
-                                                                            i]
-                                                                        .price! *
-                                                                    _totalBookDays!
-                                                                        .inDays;
-                                                            if (_bookBodyModel
-                                                                    .item!
-                                                                    .amount! <
-                                                                0) {
-                                                              _bookBodyModel
-                                                                  .item!
-                                                                  .amount = 0;
-                                                            }
-                                                            room = bookBodyModel
-                                                                .Rooms(
-                                                                    roomId: "",
-                                                                    roomNo: "",
-                                                                    price: 0);
-                                                            room.roomId = _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .id! *
-                                                                _totalBookDays!
-                                                                    .inDays;
-                                                            room.roomNo =
-                                                                _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .roomNo!;
-                                                            room.price = _roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .price! *
-                                                                _totalBookDays!
-                                                                    .inDays;
-                                                            _bookBodyModel
-                                                                .item!.rooms!
-                                                                .removeWhere((item) =>
-                                                                    item.roomNo ==
-                                                                    room.roomNo);
-                                                          }
-                                                          setState(() {
-                                                            _roomsModel!
-                                                                    .result![index]
-                                                                    .rooms![i]
-                                                                    .checked =
-                                                                !_roomsModel!
-                                                                    .result![
-                                                                        index]
-                                                                    .rooms![i]
-                                                                    .checked!;
-                                                          });
-                                                        }),
+                                                            }),
                                           )
                                         ],
                                       ),
