@@ -61,7 +61,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "20223334455",
+                      "2022334455",
                       style: getBoldStyle(
                           color: ColorConstants.white, fontSize: FontSizes.s16),
                     ),
