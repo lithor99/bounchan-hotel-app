@@ -54,7 +54,14 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 20),
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/logo.png"),
+                              fit: BoxFit.cover)),
+                    ),
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -90,7 +97,12 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
+                    Text("ເລກບິນ: ${_bookModel!.result!.billNo}",
+                        style: getRegularStyle(
+                            fontSize: FontSizes.s16,
+                            color: ColorConstants.black)),
+                    SizedBox(height: 10),
                     Text(
                         _bookModel!.result!.status == 1
                             ? " ລໍຖ້າແຈ້ງເຂົ້າ"

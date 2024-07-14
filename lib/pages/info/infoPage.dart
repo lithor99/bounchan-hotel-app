@@ -26,7 +26,7 @@ class InfoPage extends StatelessWidget {
               backgroundColor: ColorConstants.primary,
               child: CircleAvatar(
                 radius: 80,
-                backgroundImage: AssetImage("assets/images/logo.jpg"),
+                backgroundImage: AssetImage("assets/images/logo.png"),
               ),
             ),
             SizedBox(height: 20),

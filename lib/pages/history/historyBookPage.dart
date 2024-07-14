@@ -126,62 +126,60 @@ class _HistoryBookPageState extends State<HistoryBookPage> {
                                         fontSize: FontSizes.s14),
                                   ),
                                   SizedBox(height: 5),
-                                  Wrap(
-                                    children: [
-                                      Text("ສະຖານະ: ",
-                                          style: getRegularStyle(
-                                              color: ColorConstants.lightGrey,
-                                              fontSize: FontSizes.s14)),
-                                      Container(
-                                        width: 80,
-                                        padding: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                            color: _booksModel!.result!
-                                                        .rows![index].status ==
-                                                    1
-                                                ? ColorConstants.info
-                                                : _booksModel!
-                                                            .result!
-                                                            .rows![index]
-                                                            .status ==
-                                                        2
-                                                    ? ColorConstants.success
-                                                    : _booksModel!
-                                                                .result!
-                                                                .rows![index]
-                                                                .status ==
-                                                            3
-                                                        ? ColorConstants
-                                                            .darkGrey
-                                                        : ColorConstants.error,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Center(
-                                          child: Text(
-                                            _booksModel!.result!.rows![index]
-                                                        .status ==
-                                                    1
-                                                ? " ລໍຖ້າແຈ້ງເຂົ້າ"
-                                                : _booksModel!
-                                                            .result!
-                                                            .rows![index]
-                                                            .status ==
-                                                        2
-                                                    ? " ລໍຖ້າແຈ້ງອອກ"
-                                                    : _booksModel!
-                                                                .result!
-                                                                .rows![index]
-                                                                .status ==
-                                                            3
-                                                        ? " ແຈ້ງອອກແລ້ວ"
-                                                        : " ຍົກເລີກການຈອງ",
-                                            style: getRegularStyle(
-                                                color: ColorConstants.white,
-                                                fontSize: FontSizes.s12),
-                                          ),
+                                  RichText(
+                                    text: TextSpan(
+                                        text: "ສະຖານະ: ",
+                                        style: getRegularStyle(
+                                          color: ColorConstants.lightGrey,
+                                          fontSize: FontSizes.s16,
                                         ),
-                                      ),
-                                    ],
+                                        children: [
+                                          TextSpan(
+                                              text: _booksModel!
+                                                          .result!
+                                                          .rows![index]
+                                                          .status ==
+                                                      1
+                                                  ? "ລໍຖ້າແຈ້ງເຂົ້າ"
+                                                  : _booksModel!
+                                                              .result!
+                                                              .rows![index]
+                                                              .status ==
+                                                          2
+                                                      ? "ລໍຖ້າແຈ້ງອອກ"
+                                                      : _booksModel!
+                                                                  .result!
+                                                                  .rows![index]
+                                                                  .status ==
+                                                              3
+                                                          ? "ແຈ້ງອອກແລ້ວ"
+                                                          : "ຍົກເລີກການຈອງ",
+                                              style: getRegularStyle(
+                                                color: _booksModel!
+                                                            .result!
+                                                            .rows![index]
+                                                            .status ==
+                                                        1
+                                                    ? ColorConstants.info
+                                                    : _booksModel!
+                                                                .result!
+                                                                .rows![index]
+                                                                .status ==
+                                                            2
+                                                        ? ColorConstants.success
+                                                        : _booksModel!
+                                                                    .result!
+                                                                    .rows![
+                                                                        index]
+                                                                    .status ==
+                                                                3
+                                                            ? ColorConstants
+                                                                .black
+                                                            : ColorConstants
+                                                                .error,
+                                                fontSize: FontSizes.s16,
+                                              ))
+                                        ]),
                                   ),
                                 ],
                               ),
