@@ -118,7 +118,7 @@ class _HistoryBookDetailPageState extends State<HistoryBookDetailPage> {
                               : _bookModel!.result!.status == 2
                                   ? ColorConstants.success
                                   : _bookModel!.result!.status == 3
-                                      ? ColorConstants.black
+                                      ? ColorConstants.primary
                                       : ColorConstants.error,
                         )),
                     SizedBox(height: 20),
